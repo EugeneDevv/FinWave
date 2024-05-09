@@ -51,6 +51,11 @@ namespace api.Repository
             return await _context.Stocks.Include(c=> c.Comments).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public Task<bool> StockExists(int id)
+        {
+            return _context.Stocks.AnyAsync(s =>s.Id == id);
+        }
+
         public async Task<Stock?> UpdateAsync(int id, UpdateStockRequest updateStockDto)
         {
             var existingStockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
@@ -60,7 +65,7 @@ namespace api.Repository
                 return null;
             }
 
-            existingStockModel.Symbol = updateStockDto.Symbol;
+        existingStockModel.Symbol = updateStockDto.Symbol;
             existingStockModel.CompanyName = updateStockDto.CompanyName;
             existingStockModel.Purchase = updateStockDto.Purchase;
             existingStockModel.LastDiv = updateStockDto.LastDiv;
